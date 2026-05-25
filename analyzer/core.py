@@ -112,20 +112,23 @@ def _codon_usage(seq: str) -> dict[str, int]:
             usage[codon] = usage.get(codon, 0) + 1
     return dict(sorted(usage.items(), key=lambda x: -x[1]))
 
-
 def _reading_frames(seq: Seq) -> dict[str, str]:
     frames = {}
+
     for frame in range(3):
         offset = frame
         sub = str(seq[offset:])
-        protein = str(sub.translate(table=1, to_stop=False))
+        protein = str(Seq(sub).translate(table=1, to_stop=False))
         frames[f"+{frame + 1}"] = protein[:500]
+
     rev = seq.reverse_complement()
+
     for frame in range(3):
         offset = frame
         sub = str(rev[offset:])
-        protein = str(sub.translate(table=1, to_stop=False))
+        protein = str(Seq(sub).translate(table=1, to_stop=False))
         frames[f"-{frame + 1}"] = protein[:500]
+
     return frames
 
 
